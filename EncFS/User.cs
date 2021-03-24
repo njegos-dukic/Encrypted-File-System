@@ -16,6 +16,5 @@ namespace EncFS
             this.password = password;
             // TODO: Initialize digital certificate.
         }
-
     }
 }

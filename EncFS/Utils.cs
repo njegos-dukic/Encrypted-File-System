@@ -16,6 +16,12 @@ namespace EncFS
                 Directory.CreateDirectory("root");
 
             Directory.SetCurrentDirectory("root");
+
+            if (!Directory.Exists("shared-folder"))
+                Directory.CreateDirectory("shared-folder");
+
+            if (!Directory.Exists("certificates"))
+                Directory.CreateDirectory("shared-folder");
         }
 
         public static string ExecutePowerShellCommand(string command)

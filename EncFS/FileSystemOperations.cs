@@ -8,7 +8,7 @@ namespace EncFS
 {
     class FileSystemOperations
     {
-        public static void InterpretCommand(string command)
+        public static bool InterpretCommand(string command, User user)
         {
             var args = command.Split(' ');
             for (int i = 0; i < args.Length; i++)
@@ -19,7 +19,7 @@ namespace EncFS
                 // create "Content" fileName.txt
                 case "create":
                     if (args.Length < 3)
-                        return;
+                        return true;
 
                     args = command.Split('\"');
                     CreateTextFile(args[2].Trim(), args[1].Trim());
@@ -28,7 +28,7 @@ namespace EncFS
                 // open fileName
                 case "open":
                     if (args.Length < 2)
-                        return;
+                        return false;
 
                     OpenFile(args[1]);
                     break;
@@ -37,7 +37,7 @@ namespace EncFS
                 // upload path
                 case "upload":
                     if (args.Length < 2)
-                        return;
+                        return false;
 
                     UploadFile(args[1]);
                     break;
@@ -45,7 +45,7 @@ namespace EncFS
                 // download fileName
                 case "download":
                     if (args.Length < 2)
-                        return;
+                        return false;
                     
                     DownloadFile(args[1]);
                     break;
@@ -53,7 +53,7 @@ namespace EncFS
                 // edit fileName.txt 
                 case "edit":
                     if (args.Length < 2)
-                        return;
+                        return false;
 
                     EditTextFile(args[1]);
                     break;
@@ -61,18 +61,23 @@ namespace EncFS
                 // delete fileName
                 case "delete":
                     if (args.Length < 2)
-                        return;
+                        return false;
 
                     DeleteFile(args[1]);
                     break;
+
+                case "login":
+                    
 
                 case "exit":
                     Environment.Exit(0);
                     break;
 
                 default:
-                    return;
+                    return false;
             }
+
+            return true;
         }
 
         private static void CreateTextFile(string fileName, string content)
@@ -171,6 +176,18 @@ namespace EncFS
 
             else
                 File.Delete(fileName);
+        }
+
+        // TODO: Srediti.
+        private static void ShareFile(string fileName, string userName)
+        {
+            if (!File.Exists(fileName))
+                System.Console.WriteLine("File " + fileName + " does not exist. Please specify another file.");
+            
+            else
+            {
+                File.Copy(fileName, "..\\shared-folder\\" + Path.GetFileName(fileName));
+            }
         }
     }
 }
