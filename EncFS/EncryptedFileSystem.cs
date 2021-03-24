@@ -11,7 +11,9 @@ namespace EncFS
             Utils.PrepareEnvironment();
             while (true)
             {
-                System.Console.Write("\n" + currentUser.Username + " > ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                System.Console.Write("\n" + currentUser.Username + " >> ");
+                Console.ForegroundColor = ConsoleColor.White;
                 var input = System.Console.ReadLine();
                 FileSystemOperations.InterpretCommand(input);
             }
