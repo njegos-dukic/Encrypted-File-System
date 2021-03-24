@@ -21,7 +21,7 @@ namespace EncFS
                 Directory.CreateDirectory("shared-folder");
 
             if (!Directory.Exists("certificates"))
-                Directory.CreateDirectory("shared-folder");
+                Directory.CreateDirectory("certificates");
 
             if (!Directory.Exists("database"))
                 Directory.CreateDirectory("database");
