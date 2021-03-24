@@ -86,6 +86,7 @@ namespace EncFS
 
                 // TODO: content = Cyphers.Encrypt(content, algorithm, password);
                 File.WriteAllText(fileName, content);
+                Cyphers.SymmetricFileEncryption(fileName);
             }
         }
 

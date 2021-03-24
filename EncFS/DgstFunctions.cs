@@ -11,4 +11,11 @@ namespace EncFS
             return Utils.ExecutePowerShellCommand("openssl passwd -6 -salt ST " + password).Trim();
         }
     }
+
+    enum DgstFunction
+    {
+        SHA256,
+        MD5,
+        BLAKE
+    }
 }

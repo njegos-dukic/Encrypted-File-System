@@ -7,7 +7,7 @@ namespace EncFS
 {
     class AccountAccess
     {
-        private static Dictionary<string, string> accounts = new Dictionary<string, string>();
+        private static Dictionary<string, (string, string, string)> accounts = new Dictionary<string, (string, string, string)>();
 
         private static void UpdateAccounts()
         {
@@ -16,9 +16,9 @@ namespace EncFS
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
-                var values = line.Split(',', 2);
+                var values = line.Split(',');
 
-                accounts.Add(values[0].Trim(), values[1]);
+                accounts.Add(values[0].Trim(), (values[1], values[2], values[3]));
             }
 
             reader.Close();
@@ -32,15 +32,19 @@ namespace EncFS
             var username = System.Console.ReadLine().Trim();
             System.Console.Write("Password: ");
             var password = ReadSecretPassword();
-            accounts.TryGetValue(username, out string filePassword);
+            accounts.TryGetValue(username, out (string pass, string cyph, string dgst) userInfo);
 
             if (!accounts.ContainsKey(username))
                 System.Console.WriteLine("- Account does not exist.\n");
 
-            else if (filePassword == DgstFunctions.HashPassword(password))
+            else if (userInfo.pass == DgstFunctions.HashPassword(password))
             {
                 System.Console.WriteLine("- Successful login.");
-                return new User(username);
+                if (!Directory.Exists(username))
+                    Directory.CreateDirectory(username);
+
+                Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + "\\" + username);
+                return new User(username, userInfo.cyph, userInfo.dgst);
             }
 
             else
@@ -67,9 +71,26 @@ namespace EncFS
             else
             {
                 var writer = new StreamWriter(Directory.GetCurrentDirectory() + "\\database\\users.csv", append: true);
-                writer.WriteLine(username + "," + DgstFunctions.HashPassword(password), true);
+                System.Console.WriteLine("\n   [CYPHER TYPE]\n   -------------");
+                System.Console.WriteLine("   [1] DES3");
+                System.Console.WriteLine("   [2] AES256");
+                System.Console.WriteLine("   [3] BF");
+                System.Console.Write("   Please select: ");
+                var cypherInput = System.Console.ReadLine();
+
+                System.Console.WriteLine("\n   [DGST TYPE]\n   -----------");
+                System.Console.WriteLine("   [1] SHA256");
+                System.Console.WriteLine("   [2] MD5");
+                System.Console.WriteLine("   [3] BLAKE");
+                System.Console.Write("   Please select: ");
+                var dgstInput = System.Console.ReadLine();
+
+                // TODO: Check je li svaki put od 1 do 3.
+                writer.WriteLine(username + "," + DgstFunctions.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
-                System.Console.WriteLine("- Successful registration.\n");
+
+                // TODO: Select cypher and dgst type.
+                System.Console.WriteLine("\n- Successful registration.\n");
             }
 
             return;

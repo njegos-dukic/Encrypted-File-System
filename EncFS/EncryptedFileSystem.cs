@@ -6,7 +6,7 @@ namespace EncFS
 {
     class EncryptedFileSystem
     {
-        private static User currentUser = null;
+        public static User currentUser { get; private set; }
 
         static void Main(string[] args)
         {
