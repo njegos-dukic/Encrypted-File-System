@@ -22,6 +22,12 @@ namespace EncFS
 
             if (!Directory.Exists("certificates"))
                 Directory.CreateDirectory("shared-folder");
+
+            if (!Directory.Exists("database"))
+                Directory.CreateDirectory("database");
+
+            if (!File.Exists("database\\users.csv"))
+                File.Create("database\\users.csv").Close();
         }
 
         public static string ExecutePowerShellCommand(string command)

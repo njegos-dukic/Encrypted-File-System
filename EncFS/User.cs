@@ -7,13 +7,11 @@ namespace EncFS
     class User
     {
         public string Username { get; private set; }
-        private string password;
         // TODO: Add digital certificate.
         
-        public User(string username, string password)
+        public User(string username)
         {
             this.Username = username;
-            this.password = password;
             // TODO: Initialize digital certificate.
         }
     }

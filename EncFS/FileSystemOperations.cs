@@ -16,7 +16,6 @@ namespace EncFS
 
             switch (args[0])
             {
-                // create "Content" fileName.txt
                 case "create":
                     if (args.Length < 3)
                         return true;
@@ -25,7 +24,6 @@ namespace EncFS
                     CreateTextFile(args[2].Trim(), args[1].Trim());
                     break;
 
-                // open fileName
                 case "open":
                     if (args.Length < 2)
                         return false;
@@ -33,8 +31,6 @@ namespace EncFS
                     OpenFile(args[1]);
                     break;
 
-
-                // upload path
                 case "upload":
                     if (args.Length < 2)
                         return false;
@@ -42,7 +38,6 @@ namespace EncFS
                     UploadFile(args[1]);
                     break;
 
-                // download fileName
                 case "download":
                     if (args.Length < 2)
                         return false;
@@ -50,7 +45,6 @@ namespace EncFS
                     DownloadFile(args[1]);
                     break;
 
-                // edit fileName.txt 
                 case "edit":
                     if (args.Length < 2)
                         return false;
@@ -58,16 +52,12 @@ namespace EncFS
                     EditTextFile(args[1]);
                     break;
 
-                // delete fileName
                 case "delete":
                     if (args.Length < 2)
                         return false;
 
                     DeleteFile(args[1]);
                     break;
-
-                case "login":
-                    
 
                 case "exit":
                     Environment.Exit(0);
@@ -77,6 +67,7 @@ namespace EncFS
                     return false;
             }
 
+            System.Console.WriteLine();
             return true;
         }
 

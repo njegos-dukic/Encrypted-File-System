@@ -8,7 +8,7 @@ namespace EncFS
     {
         public static string HashPassword(string password)
         {
-            return Utils.ExecutePowerShellCommand("passwd -6 -salt ST " + password);
+            return Utils.ExecutePowerShellCommand("openssl passwd -6 -salt ST " + password).Trim();
         }
     }
 }

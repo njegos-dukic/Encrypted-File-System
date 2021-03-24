@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace EncFS
 {
     class EncryptedFileSystem
     {
-        private static User currentUser = new User("njegos", "dukic");
+        private static User currentUser = null;
 
         static void Main(string[] args)
         {
@@ -14,33 +16,40 @@ namespace EncFS
 
         public static void StartInterpreter()
         {
+            Initialize();
+            System.Console.Clear();
+
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                System.Console.Write("\n" + currentUser.Username + " >> ");
+                System.Console.Write(currentUser.Username + " >> ");
                 Console.ForegroundColor = ConsoleColor.White;
                 var input = System.Console.ReadLine();
                 FileSystemOperations.InterpretCommand(input, currentUser);
             }
         }
-
-        public static void Login()
+    
+        public static void Initialize()
         {
-            System.Console.WriteLine("1 - Login\n2 - Create account");
-            System.Console.Write("Please specify: ");
-            var input = System.Console.ReadLine();
-            if ("1" == input.Trim())
-                EncryptedFileSystem.Login();
+            while (currentUser == null)
+            {
+                System.Console.WriteLine("[ACCOUNT SETUP]\n---------------");
+                System.Console.WriteLine("[1] Login\n[2] Create new account");
+                System.Console.Write("Please select: ");
+                var input = System.Console.ReadLine();
 
-            else if ("2" == input.Trim())
-                EncryptedFileSystem.Register();
+                if ("1" == input.Trim())
+                    currentUser = AccountAccess.Login();
 
-            else
-                System.Console.WriteLine("Please select 1 or 2.");
+                else if ("2" == input.Trim())
+                    AccountAccess.Register();
+
+                else
+                    System.Console.WriteLine("- Please select 1 or 2.\n");
+            }
+
+            return;
         }
+    }
+}   
 
-        public static void Register()
-        {
-        }
-    }   
-}
