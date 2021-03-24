@@ -44,7 +44,7 @@ namespace EncFS
                     Directory.CreateDirectory(username);
 
                 Directory.SetCurrentDirectory(Directory.GetCurrentDirectory() + "\\" + username);
-                return new User(username, userInfo.cyph, userInfo.dgst);
+                return new User(username, userInfo.pass, userInfo.cyph, userInfo.dgst);
             }
 
             else

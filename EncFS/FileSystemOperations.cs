@@ -84,7 +84,6 @@ namespace EncFS
                     return;
                 }
 
-                // TODO: content = Cyphers.Encrypt(content, algorithm, password);
                 File.WriteAllText(fileName, content);
                 Cyphers.SymmetricFileEncryption(fileName);
             }
@@ -97,10 +96,7 @@ namespace EncFS
 
             else
             {
-                byte[] content = File.ReadAllBytes(fileName);
-                // TODO: content = Cyphers.Decrypt(content, algorithm, password);
-                string tmpFilename = Path.GetTempFileName() + Path.GetExtension(Path.GetFullPath(fileName));
-                File.WriteAllBytes(tmpFilename, content);
+                string tmpFilename = Cyphers.SymmetricFileDecryption(fileName);
                 Process fileOpener = new Process();
                 fileOpener.StartInfo.FileName = program;
                 fileOpener.StartInfo.Arguments = tmpFilename;
@@ -108,7 +104,6 @@ namespace EncFS
                 if (waitForClose)
                 {
                     while (!fileOpener.HasExited);
-                    DeleteFile(Path.GetFileName(fileName));
                     UploadFile(tmpFilename, fileName);
                 }
             }
@@ -116,8 +111,9 @@ namespace EncFS
 
         private static void UploadFile(string sourceFile, string fileName = "")
         {
+            sourceFile = Path.GetFullPath(sourceFile);
             if (!File.Exists(sourceFile))
-                System.Console.WriteLine("File " + sourceFile + " does not exist. Please specify another file.");
+                System.Console.WriteLine("File " + Path.GetFileName(sourceFile) + " does not exist. Please specify another file."); 
 
             else
             {
@@ -126,10 +122,10 @@ namespace EncFS
 
                 if (File.Exists(fileName))
                     System.Console.WriteLine("File " + sourceFile + " already exists. Please specify another file.");
-
+                    
                 byte[] content = File.ReadAllBytes(sourceFile);
-                // TODO: content = Cyphers.Encrypt(content, algorithm, password);
                 File.WriteAllBytes(Path.GetFileName(fileName), content);
+                Cyphers.SymmetricFileEncryption(Path.GetFileName(fileName));
             }
         }
 
@@ -140,9 +136,8 @@ namespace EncFS
 
             else
             {
-                byte[] content = File.ReadAllBytes(targetFile);
-                // TODO: content = Cyphers.Decrypt(content, algorithm, password);
-                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + Path.GetFileName(targetFile), content);
+                string tmpFilename = Cyphers.SymmetricFileDecryption(targetFile);
+                File.Copy(tmpFilename, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + Path.GetFileName(targetFile));
             }
         }
         
@@ -167,7 +162,14 @@ namespace EncFS
                 System.Console.WriteLine("File " + fileName + " does not exist. Please specify another file.");
 
             else
-                File.Delete(fileName);
+            {
+                System.Console.Write("Please enter your password: ");
+                var password = AccountAccess.ReadSecretPassword();
+                if (DgstFunctions.HashPassword(password) == EncryptedFileSystem.currentUser.PasswordHash)
+                    File.Delete(fileName);
+                else
+                    System.Console.WriteLine("Password is incorrect.");
+            }
         }
 
         // TODO: Srediti.
