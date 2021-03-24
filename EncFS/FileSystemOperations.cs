@@ -16,6 +16,11 @@ namespace EncFS
 
             switch (args[0])
             {
+                case "list":
+                    foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
+                    System.Console.WriteLine(Path.GetFileName(file));
+                    break;
+
                 case "create":
                     if (args.Length < 3)
                         return true;
