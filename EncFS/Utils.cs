@@ -49,7 +49,7 @@ namespace EncFS
             process.StartInfo.UseShellExecute = false;
             process.Start();
             while (!process.HasExited);
-            return process.StandardOutput.ReadToEnd();
+            return process.StandardOutput.ReadToEnd().Trim();
         }
     }
 }

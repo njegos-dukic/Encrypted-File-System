@@ -47,7 +47,7 @@ namespace EncFS
                     break;
 
                 case "3":
-                    DgstType = DgstFunction.BLAKE;
+                    DgstType = DgstFunction.SHA1;
                     break;
 
                 default:

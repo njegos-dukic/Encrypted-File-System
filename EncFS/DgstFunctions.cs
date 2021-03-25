@@ -11,7 +11,7 @@ namespace EncFS
 
         public static string HashPassword(string password)
         {
-            return Utils.ExecutePowerShellCommand($"openssl passwd -6 -salt {salt} " + password).Trim();
+            return Utils.ExecutePowerShellCommand($"openssl passwd -6 -salt {salt} " + password);
         }
 
         public static void CreatePrivateKey(string username)
@@ -34,8 +34,8 @@ namespace EncFS
                     Utils.ExecutePowerShellCommand($"openssl dgst -sign {Utils.KEYS_FOLDER}{EncryptedFileSystem.currentUser.Username}.key -md5 -out {file}.hash {file}");
                     break;
 
-                case DgstFunction.BLAKE:
-                    Utils.ExecutePowerShellCommand($"openssl dgst -sign {Utils.KEYS_FOLDER}{EncryptedFileSystem.currentUser.Username}.key -blake2b512 -out {file}.hash {file}");
+                case DgstFunction.SHA1:
+                    Utils.ExecutePowerShellCommand($"openssl dgst -sign {Utils.KEYS_FOLDER}{EncryptedFileSystem.currentUser.Username}.key -sha1 -out {file}.hash {file}");
                     break;
 
                 default:
@@ -55,8 +55,8 @@ namespace EncFS
                 case DgstFunction.MD5:
                     return Utils.ExecutePowerShellCommand($"openssl dgst -prverify {Utils.KEYS_FOLDER}{EncryptedFileSystem.currentUser.Username}.key -md5 -signature {file}.hash {file}").Contains("OK");
 
-                case DgstFunction.BLAKE:
-                    return Utils.ExecutePowerShellCommand($"openssl dgst -prverify {Utils.KEYS_FOLDER}{EncryptedFileSystem.currentUser.Username}.key -blake2b512 -signature {file}.hash {file}").Contains("OK");
+                case DgstFunction.SHA1:
+                    return Utils.ExecutePowerShellCommand($"openssl dgst -prverify {Utils.KEYS_FOLDER}{EncryptedFileSystem.currentUser.Username}.key -sha1 -signature {file}.hash {file}").Contains("OK");
 
                 default:
                     return false;
@@ -68,6 +68,6 @@ namespace EncFS
     {
         SHA256,
         MD5,
-        BLAKE
+        SHA1
     }
 }

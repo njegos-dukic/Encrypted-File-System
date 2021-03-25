@@ -71,26 +71,40 @@ namespace EncFS
             else
             {
                 var writer = new StreamWriter(Directory.GetCurrentDirectory() + "\\database\\users.csv", append: true);
-                System.Console.WriteLine("\n   [CYPHER TYPE]\n   -------------");
-                System.Console.WriteLine("   [1] DES3");
-                System.Console.WriteLine("   [2] AES256");
-                System.Console.WriteLine("   [3] RC4");
-                System.Console.Write("   Please select: ");
-                var cypherInput = System.Console.ReadLine();
+                string cypherInput;
+                string dgstInput;
 
-                System.Console.WriteLine("\n   [DGST TYPE]\n   -----------");
-                System.Console.WriteLine("   [1] SHA256");
-                System.Console.WriteLine("   [2] MD5");
-                System.Console.WriteLine("   [3] BLAKE");
-                System.Console.Write("   Please select: ");
-                var dgstInput = System.Console.ReadLine();
-                // TODO: Check je li svaki put od 1 do 3.
+                while (true)
+                {
+                    System.Console.WriteLine("\n   [CYPHER TYPE]\n   -------------");
+                    System.Console.WriteLine("   [1] DES3");
+                    System.Console.WriteLine("   [2] AES256");
+                    System.Console.WriteLine("   [3] RC4");
+                    System.Console.Write("   Please select: ");
+                    cypherInput = System.Console.ReadLine();
+                    if ("1" == cypherInput || "2" == cypherInput || "3" == cypherInput)
+                        break;
+
+                    System.Console.WriteLine("   Please specify [1], [2] or [3].");
+                }
+
+                while (true)
+                {
+                    System.Console.WriteLine("\n   [DGST TYPE]\n   -----------");
+                    System.Console.WriteLine("   [1] SHA256");
+                    System.Console.WriteLine("   [2] MD5");
+                    System.Console.WriteLine("   [3] SHA1");
+                    System.Console.Write("   Please select: ");
+                    dgstInput = System.Console.ReadLine();
+                    if ("1" == dgstInput || "2" == dgstInput || "3" == dgstInput)
+                        break;
+
+                    System.Console.WriteLine("   Please specify [1], [2] or [3].");
+                }
 
                 DgstFunctions.CreatePrivateKey(username);
-
                 writer.WriteLine(username + "," + DgstFunctions.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
-
                 System.Console.WriteLine("\n- Successful registration.\n");
             }
 

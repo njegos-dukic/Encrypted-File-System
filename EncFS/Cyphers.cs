@@ -56,7 +56,7 @@ namespace EncFS
                     break;
 
                 case SymmetricCypher.RC4:
-                    Utils.ExecutePowerShellCommand($"openssl bf-cbc -d -pbkdf2 -iter 100000 -k {password} -in {inputFile} -out {outfile}");
+                    Utils.ExecutePowerShellCommand($"openssl rc4 -d -pbkdf2 -iter 100000 -k {password} -in {inputFile} -out {outfile}");
                     break;
 
                 default:
