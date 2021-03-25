@@ -8,6 +8,11 @@ namespace EncFS
 {
     class Utils
     {
+        public static readonly string ROOT_FOLDER = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root";
+        public static readonly string KEYS_FOLDER = ROOT_FOLDER + "\\keys\\";
+        public static readonly string CERTIFICATES_FOLDER = ROOT_FOLDER + "\\certificates\\";
+        public static readonly string SHARED_FOLDER = ROOT_FOLDER + "\\shared-folder\\";
+
         public static void PrepareEnvironment()
         {
             Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
@@ -23,6 +28,9 @@ namespace EncFS
             if (!Directory.Exists("certificates"))
                 Directory.CreateDirectory("certificates");
 
+            if (!Directory.Exists("keys"))
+                Directory.CreateDirectory("keys");
+
             if (!Directory.Exists("database"))
                 Directory.CreateDirectory("database");
 
@@ -34,7 +42,7 @@ namespace EncFS
         {
             var process = new Process()
             {
-                StartInfo = new ProcessStartInfo("cmd.exe", "/C " + command)
+                StartInfo = new ProcessStartInfo("cmd.exe", "/C " + command + " 2> errors.txt")
             };
 
             process.StartInfo.RedirectStandardOutput = true;

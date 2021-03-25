@@ -74,7 +74,7 @@ namespace EncFS
                 System.Console.WriteLine("\n   [CYPHER TYPE]\n   -------------");
                 System.Console.WriteLine("   [1] DES3");
                 System.Console.WriteLine("   [2] AES256");
-                System.Console.WriteLine("   [3] BF");
+                System.Console.WriteLine("   [3] RC4");
                 System.Console.Write("   Please select: ");
                 var cypherInput = System.Console.ReadLine();
 
@@ -84,12 +84,13 @@ namespace EncFS
                 System.Console.WriteLine("   [3] BLAKE");
                 System.Console.Write("   Please select: ");
                 var dgstInput = System.Console.ReadLine();
-
                 // TODO: Check je li svaki put od 1 do 3.
+
+                DgstFunctions.CreatePrivateKey(username);
+
                 writer.WriteLine(username + "," + DgstFunctions.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
 
-                // TODO: Select cypher and dgst type.
                 System.Console.WriteLine("\n- Successful registration.\n");
             }
 

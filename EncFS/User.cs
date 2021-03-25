@@ -29,7 +29,7 @@ namespace EncFS
                     break;
 
                 case "3":
-                    CypherType = SymmetricCypher.BF;
+                    CypherType = SymmetricCypher.RC4;
                     break;
 
                 default:

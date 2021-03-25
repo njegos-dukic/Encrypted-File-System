@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace EncFS
@@ -57,11 +58,22 @@ namespace EncFS
                     EditTextFile(args[1]);
                     break;
 
+                case "sign":
+                    DgstFunctions.SignFile(args[1]);
+                    break;
+
+                case "verify":
+                    System.Console.WriteLine("Verified: " + DgstFunctions.VerifyFile(args[1]));
+                    break;
+
                 case "delete":
                     if (args.Length < 2)
                         return false;
 
                     DeleteFile(args[1]);
+                    break;
+
+                case "logout":
                     break;
 
                 case "exit":
@@ -91,6 +103,7 @@ namespace EncFS
 
                 File.WriteAllText(fileName, content);
                 Cyphers.SymmetricFileEncryption(fileName);
+                DgstFunctions.SignFile(Path.GetFileName(fileName));
             }
         }
 
@@ -101,15 +114,24 @@ namespace EncFS
 
             else
             {
-                string tmpFilename = Cyphers.SymmetricFileDecryption(fileName);
+                if (!DgstFunctions.VerifyFile(Path.GetFileName(fileName)))
+                {
+                    System.Console.WriteLine("File integrity violated. Preventing file from opening.");
+                    return;
+                }
+
+                (string tmpFilename, bool success) decFile = Cyphers.SymmetricFileDecryption(fileName);
+                if (decFile.success == false)
+                    return;
+
                 Process fileOpener = new Process();
                 fileOpener.StartInfo.FileName = program;
-                fileOpener.StartInfo.Arguments = tmpFilename;
+                fileOpener.StartInfo.Arguments = decFile.tmpFilename;
                 fileOpener.Start();
                 if (waitForClose)
                 {
                     while (!fileOpener.HasExited);
-                    UploadFile(tmpFilename, fileName);
+                    UploadFile(decFile.tmpFilename, fileName);
                 }
             }
         }
@@ -125,12 +147,11 @@ namespace EncFS
                 if ("" == fileName)
                     fileName = sourceFile;
 
-                if (File.Exists(fileName))
-                    System.Console.WriteLine("File " + sourceFile + " already exists. Please specify another file.");
-                    
                 byte[] content = File.ReadAllBytes(sourceFile);
                 File.WriteAllBytes(Path.GetFileName(fileName), content);
+                File.WriteAllText("errors.txt", "");
                 Cyphers.SymmetricFileEncryption(Path.GetFileName(fileName));
+                DgstFunctions.SignFile(Path.GetFileName(fileName));
             }
         }
 
@@ -141,8 +162,17 @@ namespace EncFS
 
             else
             {
-                string tmpFilename = Cyphers.SymmetricFileDecryption(targetFile);
-                File.Copy(tmpFilename, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + Path.GetFileName(targetFile));
+                if (!DgstFunctions.VerifyFile(Path.GetFileName(targetFile)))
+                {
+                    System.Console.WriteLine("File integrity violated. Preventing file from opening.");
+                    return;
+                }
+
+                (string tmpFilename, bool success) decFile = Cyphers.SymmetricFileDecryption(targetFile);
+                if (decFile.success == false)
+                    return;
+
+                File.Copy(decFile.tmpFilename, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + Path.GetFileName(targetFile));
             }
         }
         
