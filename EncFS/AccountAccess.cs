@@ -39,6 +39,12 @@ namespace EncFS
 
             else if (userInfo.pass == DgstFunctions.HashPassword(password))
             {
+                if (!Certification.VerifyCertificate(username))
+                {
+                    System.Console.WriteLine("- Invalid certificate.\n");
+                    return null;
+                }
+
                 System.Console.WriteLine("- Successful login.");
                 if (!Directory.Exists(username))
                     Directory.CreateDirectory(username);
@@ -103,6 +109,7 @@ namespace EncFS
                 }
 
                 DgstFunctions.CreatePrivateKey(username);
+                Certification.CreateCertificate(username);
                 writer.WriteLine(username + "," + DgstFunctions.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
                 System.Console.WriteLine("\n- Successful registration.\n");

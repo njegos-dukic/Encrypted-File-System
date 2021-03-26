@@ -10,12 +10,20 @@ namespace EncFS
     {
         public static readonly string ROOT_FOLDER = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root";
         public static readonly string KEYS_FOLDER = ROOT_FOLDER + "\\keys\\";
-        public static readonly string CERTIFICATES_FOLDER = ROOT_FOLDER + "\\certificates\\";
+        public static readonly string CERTIFICATES_ROOT = ROOT_FOLDER + "\\certificates\\";
+        public static readonly string CERTIFICATES_DATABASE = CERTIFICATES_ROOT + "\\certs\\";
+
         public static readonly string SHARED_FOLDER = ROOT_FOLDER + "\\shared-folder\\";
 
         public static void PrepareEnvironment()
         {
             Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+
+            //if (!File.Exists("openssl.conf"))
+            //{
+            //    System.Console.WriteLine("Please place OpenSSL configuration file on Desktop.\n");
+            //    Environment.Exit(1);
+            //}
 
             if (!Directory.Exists("root"))
                 Directory.CreateDirectory("root");
