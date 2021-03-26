@@ -112,7 +112,7 @@ namespace EncFS
                 Certification.CreateCertificate(username);
                 writer.WriteLine(username + "," + DgstFunctions.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
-                System.Console.WriteLine("\n- Successful registration.\n");
+                System.Console.WriteLine($"- Successful registration {username}.\n");
             }
 
             return;

@@ -42,6 +42,7 @@ namespace EncFS
                     return;
             }
 
+            // TODO: Kriptovati hash.
             File.SetAttributes($"{file}.hash", FileAttributes.Hidden);
         }
 

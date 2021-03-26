@@ -7,16 +7,17 @@ namespace EncFS
     class User
     {
         public string Username { get; private set; }
+        
         public string PasswordHash { get; private set; }
 
-        public SymmetricCypher CypherType { get; private set; }
-        public DgstFunction DgstType { get; private set; }
-        // TODO: Add digital certificate.
+        public SymmetricCypher CypherType { get; set; }
+        
+        public DgstFunction DgstType { get; set; }
 
         public User(string username, string passwordHash, string cypher, string dgst)
         {
             this.Username = username;
-            this.PasswordHash = passwordHash;
+            this.PasswordHash = passwordHash; // Using for deleting files.
 
             switch (cypher)
             {
@@ -53,8 +54,6 @@ namespace EncFS
                 default:
                     return;
             }
-
-            // TODO: Initialize digital certificate.
         }
     }
 }

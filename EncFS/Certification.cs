@@ -12,29 +12,24 @@ namespace EncFS
             System.Console.WriteLine("[Generating CA Certificate]");
             System.Console.WriteLine("---------------------------\n");
 
-            //System.Console.Write("Please enter CA password: ");
-            //var password = AccountAccess.ReadSecretPassword().Trim();
-            //File.WriteAllText("private\\passin.exe", password);
-            // -passout private\\pass
-
-            Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root\\certificates");
+            Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}\\certificates");
             Utils.ExecutePowerShellCommand($"openssl req -x509 -new -out rootca.pem  -config openssl.cnf -days 365", false);
-            Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root");
+            Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}");
         }
 
         public static void CreateCertificate(string username)
         {
             System.Console.WriteLine();
-            Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root\\certificates");
+            Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}\\certificates");
             Utils.ExecutePowerShellCommand($"openssl req -new -key ..\\keys\\{username}.key -config openssl.cnf -out requests//{username}.csr", false);
             Utils.ExecutePowerShellCommand($"openssl ca -in requests\\{username}.csr -out certs\\{username}.crt -config openssl.cnf", false);
-            Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root");
+            Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}");
             System.Console.Clear();
         }
 
         public static bool VerifyCertificate(string username)
         {
-            Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root\\certificates");
+            Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}\\certificates");
             if (!File.Exists("crl\\crl-list.pem"))
             {
                 System.Console.WriteLine("Creating CRL list.");
@@ -42,7 +37,7 @@ namespace EncFS
             }
 
             var valid = (Utils.ExecutePowerShellCommand($"openssl verify -crl_check -CAfile rootca.pem -CRLfile crl\\crl-list.pem certs\\{username}.crt")).Contains("OK");
-            Directory.SetCurrentDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\root");
+            Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}");
             return valid;
         }
 

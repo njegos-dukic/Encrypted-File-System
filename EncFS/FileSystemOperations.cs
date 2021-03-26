@@ -73,7 +73,12 @@ namespace EncFS
                     DeleteFile(args[1]);
                     break;
 
-                case "logout":
+                case "share":
+                    ShareFile(args[1], args[2]);
+                    break;
+
+                case "receive":
+                    DigitalEnvelope.ReceiveFile(args[1]);
                     break;
 
                 case "exit":
@@ -107,7 +112,7 @@ namespace EncFS
             }
         }
 
-        private static void OpenFile(string fileName, string program = "explorer", bool waitForClose = false)
+        public static void OpenFile(string fileName, string program = "explorer", bool waitForClose = false, string key = "")
         {
             if (!File.Exists(fileName))
                 System.Console.WriteLine("File " + fileName + " does not exist. Please specify another file.");
@@ -120,7 +125,7 @@ namespace EncFS
                     return;
                 }
 
-                (string tmpFilename, bool success) decFile = Cyphers.SymmetricFileDecryption(fileName);
+                (string tmpFilename, bool success) decFile = Cyphers.SymmetricFileDecryption(fileName, key: key);
                 if (decFile.success == false)
                     return;
 
@@ -207,7 +212,6 @@ namespace EncFS
             }
         }
 
-        // TODO: Srediti.
         private static void ShareFile(string fileName, string userName)
         {
             if (!File.Exists(fileName))
@@ -215,7 +219,7 @@ namespace EncFS
             
             else
             {
-                File.Copy(fileName, "..\\shared-folder\\" + Path.GetFileName(fileName));
+                DigitalEnvelope.ShareFile(fileName, userName);
             }
         }
     }
