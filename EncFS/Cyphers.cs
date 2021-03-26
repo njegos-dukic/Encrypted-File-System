@@ -8,12 +8,12 @@ namespace EncFS
 {
     class Cyphers
     {
-        public static void SymmetricFileEncryption(string fileName)
+        public static void SymmetricFileEncryption(string fileName, string message = "Create file password: ")
         {
             File.Copy(fileName, "[TMP] " + fileName);
             File.Delete(fileName);
 
-            System.Console.Write("Please enter file password: ");
+            System.Console.Write(message);
             var password = AccountAccess.ReadSecretPassword();
 
             switch (EncryptedFileSystem.currentUser.CypherType)
@@ -38,10 +38,10 @@ namespace EncFS
             return;
         }
 
-        public static (string, bool) SymmetricFileDecryption(string inputFile)
+        public static (string, bool) SymmetricFileDecryption(string inputFile, string message = "Enter file password: ")
         {
             var outfile = Path.GetTempFileName() + Path.GetExtension(Path.GetFullPath(inputFile));
-            System.Console.Write("Please enter file password: ");
+            System.Console.Write(message);
             var password = AccountAccess.ReadSecretPassword();
             File.WriteAllText("errors.txt", "");
 

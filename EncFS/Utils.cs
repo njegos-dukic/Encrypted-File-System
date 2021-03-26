@@ -28,6 +28,39 @@ namespace EncFS
             if (!Directory.Exists("certificates"))
                 Directory.CreateDirectory("certificates");
 
+            if (!Directory.Exists("certificates\\certs"))
+                Directory.CreateDirectory("certificates\\certs");
+
+            if (!Directory.Exists("certificates\\crl"))
+                Directory.CreateDirectory("certificates\\crl");
+
+            if (!Directory.Exists("certificates\\newcerts"))
+                Directory.CreateDirectory("certificates\\newcerts");
+
+            if (!Directory.Exists("certificates\\private"))
+                Directory.CreateDirectory("certificates\\private");
+
+            if (!Directory.Exists("certificates\\requests"))
+                Directory.CreateDirectory("certificates\\requests");
+
+            if (!File.Exists("certificates\\index.txt"))
+                File.Create("certificates\\index.txt").Close();
+
+            if (!File.Exists("certificates\\serial"))
+                File.WriteAllText("certificates\\serial", "01");
+
+            if (!File.Exists("certificates\\crlnumber"))
+                File.WriteAllText("certificates\\crlnumber", "01");
+
+            if (!File.Exists("certificates\\openssl.cnf"))
+                File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\openssl.cnf", ".\\certificates\\openssl.cnf");
+
+            if (!File.Exists("certificates\\rootca.pem"))
+            {
+                Certification.CreateCACertificate();
+                System.Console.Clear();
+            }
+
             if (!Directory.Exists("keys"))
                 Directory.CreateDirectory("keys");
 
@@ -38,12 +71,15 @@ namespace EncFS
                 File.Create("database\\users.csv").Close();
         }
 
-        public static string ExecutePowerShellCommand(string command)
+        public static string ExecutePowerShellCommand(string command, bool redirect = true)
         {
-            var process = new Process()
-            {
-                StartInfo = new ProcessStartInfo("cmd.exe", "/C " + command + " 2> errors.txt")
-            };
+            var process = new Process();
+
+            if (redirect)
+                process.StartInfo = new ProcessStartInfo("cmd.exe", "/C " + command + " 2> errors.txt");
+
+            else
+                process.StartInfo = new ProcessStartInfo("cmd.exe", "/C " + command);
 
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute = false;
