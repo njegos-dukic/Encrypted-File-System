@@ -9,7 +9,7 @@ namespace EncryptedFileSystem
     {
         private static Dictionary<string, (string, string, string)> accounts = new Dictionary<string, (string, string, string)>();
 
-        private static void GetAccounts()
+        public static Dictionary<string, (string, string, string)> GetAccounts()
         {
             accounts.Clear();
             using var reader = new StreamReader(Utils.USERS_DATABASE);
@@ -22,6 +22,7 @@ namespace EncryptedFileSystem
             }
 
             reader.Close();
+            return accounts;
         }
 
         public static string ReadSecretPassword()
@@ -56,7 +57,11 @@ namespace EncryptedFileSystem
         public static void Register()
         {
             GetAccounts();
-            System.Console.WriteLine("\n[REGISTER]\n----------");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            System.Console.WriteLine("\n[REGISTER]");
+            Console.ForegroundColor = ConsoleColor.White;
+            System.Console.WriteLine("----------");
+
             System.Console.Write("Username: ");
             var username = System.Console.ReadLine().Trim();
             System.Console.Write("Password: ");
@@ -76,7 +81,10 @@ namespace EncryptedFileSystem
 
                 while (true)
                 {
-                    System.Console.WriteLine("\n   [CYPHER TYPE]\n   -------------");
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    System.Console.WriteLine("\n   [CYPHER TYPE]");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    System.Console.WriteLine("   -------------");
                     System.Console.WriteLine("   [1] DES3");
                     System.Console.WriteLine("   [2] AES256");
                     System.Console.WriteLine("   [3] RC4");
@@ -90,7 +98,10 @@ namespace EncryptedFileSystem
 
                 while (true)
                 {
-                    System.Console.WriteLine("\n   [DGST TYPE]\n   -----------");
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    System.Console.WriteLine("\n   [HASH TYPE]");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    System.Console.WriteLine("   -----------");
                     System.Console.WriteLine("   [1] SHA256");
                     System.Console.WriteLine("   [2] MD5");
                     System.Console.WriteLine("   [3] SHA1");
@@ -106,7 +117,12 @@ namespace EncryptedFileSystem
                 DigitalCertificate.IssueCertificate(username);
                 writer.WriteLine(username + "," + DigitalSignature.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
-                System.Console.WriteLine($"\n- Successful registration {username}.\n");
+
+                System.Console.Write($"- Successful registration ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                System.Console.Write(username);
+                Console.ForegroundColor = ConsoleColor.White;
+                System.Console.WriteLine(".\n");
             }
 
             return;
@@ -115,7 +131,10 @@ namespace EncryptedFileSystem
         public static User Login()
         {
             GetAccounts();
-            System.Console.WriteLine("\n[LOGIN]\n-------");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            System.Console.WriteLine("\n[LOGIN]");
+            Console.ForegroundColor = ConsoleColor.White;
+            System.Console.WriteLine("-------");
             System.Console.Write("Username: ");
             var username = System.Console.ReadLine().Trim();
             System.Console.Write("Password: ");

@@ -11,7 +11,10 @@ namespace EncryptedFileSystem
         {
             while (FileSystem.currentUser == null)
             {
-                System.Console.WriteLine("[ACCOUNT SETUP]\n---------------");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                System.Console.WriteLine("[ACCOUNT SETUP]");
+                Console.ForegroundColor = ConsoleColor.White;
+                System.Console.WriteLine ("---------------");
                 System.Console.WriteLine("[1] Login\n[2] Create new account");
                 System.Console.Write("Please select: ");
                 var input = System.Console.ReadLine();
@@ -31,7 +34,6 @@ namespace EncryptedFileSystem
 
         public static void Start()
         {
-            System.Console.Clear();
             AccessAccount();
             System.Console.Clear();
 

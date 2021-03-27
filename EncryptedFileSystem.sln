@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptedFileSystem", "EncryptedFileSystem\EncryptedFileSystem.csproj", "{731CD910-4F48-4E21-8E2F-41534D124CA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertificateAuthority", "CertificateAuthority\CertificateAuthority.csproj", "{4F3486C9-8EFE-4EE3-818D-C457481454F2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{731CD910-4F48-4E21-8E2F-41534D124CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{731CD910-4F48-4E21-8E2F-41534D124CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{731CD910-4F48-4E21-8E2F-41534D124CA7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F3486C9-8EFE-4EE3-818D-C457481454F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F3486C9-8EFE-4EE3-818D-C457481454F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F3486C9-8EFE-4EE3-818D-C457481454F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F3486C9-8EFE-4EE3-818D-C457481454F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

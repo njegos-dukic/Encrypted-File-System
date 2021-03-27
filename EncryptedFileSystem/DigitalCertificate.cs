@@ -9,7 +9,9 @@ namespace EncryptedFileSystem
     {
         public static void CreateCACertificate()
         {
+            System.Console.ForegroundColor = ConsoleColor.Magenta;
             System.Console.WriteLine("[Generating CA Certificate]");
+            System.Console.ForegroundColor = ConsoleColor.White;
             System.Console.WriteLine("---------------------------\n");
 
             Directory.SetCurrentDirectory($"{Utils.CERTIFICATES_ROOT}");

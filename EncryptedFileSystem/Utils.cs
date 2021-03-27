@@ -40,9 +40,6 @@ namespace EncryptedFileSystem
             if (!File.Exists("certificates\\openssl.cnf"))
                 File.Copy($"{DESKTOP}\\openssl.cnf", "certificates\\openssl.cnf");
 
-            if (!File.Exists("certificates\\rootca.pem"))
-                DigitalCertificate.CreateCACertificate();
-
             if (!Directory.Exists("certificates\\certs"))
                 Directory.CreateDirectory("certificates\\certs");
 
@@ -66,6 +63,12 @@ namespace EncryptedFileSystem
 
             if (!File.Exists("certificates\\crlnumber"))
                 File.WriteAllText("certificates\\crlnumber", "01");
+
+            if (!File.Exists("certificates\\rootca.pem"))
+            {
+                DigitalCertificate.CreateCACertificate();
+                System.Console.Clear();
+            }
 
             if (!Directory.Exists("keys\\private"))
                 Directory.CreateDirectory("keys\\private");

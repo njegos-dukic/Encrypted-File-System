@@ -36,10 +36,14 @@ namespace EncryptedFileSystem
                     break;
 
                 case "create":
+                    args = command.Split('\"');
+
+                    for (int i = 0; i < args.Length; i++)
+                        args[i] = args[i].Trim();
+
                     if (args.Length != 3)
                         return false;
 
-                    args = command.Split('\"');
                     CreateTextFile(args[2].Trim(), args[1].Trim());
                     break;
 
@@ -271,10 +275,15 @@ namespace EncryptedFileSystem
 
         private static void ShareFile(string fileName, string userName)
         {
+            if (!AccountAccess.GetAccounts().ContainsKey(userName))
+            {
+                System.Console.WriteLine($"User {userName} does not exist. Please specify another user.");
+                return;
+            }    
             fileName = Path.GetFullPath(fileName);
 
             if (!File.Exists(fileName))
-                System.Console.WriteLine("File " + fileName + " does not exist. Please specify another file.");
+                System.Console.WriteLine("File \"" + fileName + "\" does not exist. Please specify another file.");
 
             else
                 DigitalEnvelope.ShareFile(fileName, userName);
