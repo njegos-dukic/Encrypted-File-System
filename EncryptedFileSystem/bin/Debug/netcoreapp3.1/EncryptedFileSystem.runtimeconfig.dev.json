@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\njego\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\njego\\.nuget\\packages"
+    ]
+  }
+}

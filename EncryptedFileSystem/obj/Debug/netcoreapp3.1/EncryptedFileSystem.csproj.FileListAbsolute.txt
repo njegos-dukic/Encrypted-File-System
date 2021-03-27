@@ -1,0 +1,13 @@
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.csprojAssemblyReference.cache
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.AssemblyInfoInputs.cache
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.AssemblyInfo.cs
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.csproj.CoreCompileInputs.cache
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\bin\Debug\netcoreapp3.1\EncryptedFileSystem.exe
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\bin\Debug\netcoreapp3.1\EncryptedFileSystem.deps.json
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\bin\Debug\netcoreapp3.1\EncryptedFileSystem.runtimeconfig.json
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\bin\Debug\netcoreapp3.1\EncryptedFileSystem.runtimeconfig.dev.json
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\bin\Debug\netcoreapp3.1\EncryptedFileSystem.dll
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\bin\Debug\netcoreapp3.1\EncryptedFileSystem.pdb
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.dll
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.pdb
+C:\Users\njego\Desktop\EncryptedFileSystem\EncryptedFileSystem\obj\Debug\netcoreapp3.1\EncryptedFileSystem.genruntimeconfig.cache
