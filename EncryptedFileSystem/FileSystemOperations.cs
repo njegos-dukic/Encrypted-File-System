@@ -22,7 +22,10 @@ namespace EncryptedFileSystem
                         return false;
 
                     foreach (var file in Directory.GetFiles($"{Utils.ROOT_FOLDER}\\{Utils.USERNAME}"))
-                        System.Console.WriteLine(Path.GetFileName(file));
+                    {
+                        if(!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains("errors.txt"))
+                            System.Console.WriteLine(Path.GetFileName(file));
+                    }
 
                     break;
 
@@ -31,7 +34,11 @@ namespace EncryptedFileSystem
                         return false;
 
                     foreach (var file in Directory.GetFiles($"{Utils.SHARED_FOLDER}"))
-                        System.Console.WriteLine(Path.GetFileName(file));
+                    {
+                        if (!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains(".envelope") && !Path.GetFileName(file).Contains("errors.txt"))
+
+                            System.Console.WriteLine(Path.GetFileName(file));
+                    }
 
                     break;
 
@@ -118,6 +125,7 @@ namespace EncryptedFileSystem
                     break;
 
                 default:
+                    System.Console.WriteLine();
                     return false;
             }
 

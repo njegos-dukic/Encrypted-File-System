@@ -12,10 +12,8 @@ namespace EncryptedFileSystem
             filename = Path.GetFullPath(filename);
             (string decfile, bool success) decrypt = SymmetricCryptography.Decrypt(filename);
             if (!decrypt.success)
-            {
-                System.Console.WriteLine("File password incorrect.\n");
+                // System.Console.WriteLine("File password incorrect.\n");
                 return;
-            }
 
             PublicKeyCryptography.GeneratePublicKeyFromCertificate(FileSystem.currentUser.Username);
             PublicKeyCryptography.GenerateDSAKeys();
