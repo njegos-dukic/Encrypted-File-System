@@ -12,16 +12,16 @@ namespace EncryptedFileSystem
             filename = Path.GetFullPath(filename);
             (string decfile, bool success) decrypt = SymmetricCryptography.Decrypt(filename);
             if (!decrypt.success)
-                // System.Console.WriteLine("File password incorrect.\n");
                 return;
 
             PublicKeyCryptography.GeneratePublicKeyFromCertificate(FileSystem.currentUser.Username);
             PublicKeyCryptography.GenerateDSAKeys();
 
             string password = Utils.GenerateRandomPassword();
+            DigitalSignature.SignSharedFile($"{decrypt.decfile}", $"{Utils.SHARED_FOLDER}\\{Path.GetFileName(filename)}");
             SymmetricCryptography.Encrypt(decrypt.decfile, $"{Utils.SHARED_FOLDER}\\{Path.GetFileName(filename)}", key: password);
+
             Directory.SetCurrentDirectory($"{Utils.SHARED_FOLDER}");
-            DigitalSignature.SignSharedFile($"{Utils.SHARED_FOLDER}\\{Path.GetFileName(filename)}");
             Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}\\{Utils.USERNAME}");
             File.WriteAllText($"{Path.GetFileName(filename)}.envelope", $"{Utils.USERNAME}\n{password}\n{FileSystem.currentUser.CypherType}\n{FileSystem.currentUser.HashType}");
             PublicKeyCryptography.Encrypt($"{Path.GetFileName(filename)}.envelope", $"{Utils.SHARED_FOLDER}\\{Path.GetFileName(filename)}.envelope", user);

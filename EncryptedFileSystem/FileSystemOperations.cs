@@ -19,7 +19,7 @@ namespace EncryptedFileSystem
             {
                 case "list":
                     if (args.Length != 1)
-                        return false;
+                        break;
 
                     foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
                     {
@@ -30,8 +30,8 @@ namespace EncryptedFileSystem
                     break;
 
                 case "cd":
-                    if (args.Length != 2)
-                        return false;
+                    if (args.Length != 2 && args[1] != "")
+                        break;
 
                     if (!Directory.Exists(args[1]))
                         Directory.CreateDirectory(args[1]);
@@ -41,7 +41,7 @@ namespace EncryptedFileSystem
 
                 case "list-shared":
                     if (args.Length != 1)
-                        return false;
+                        break;
 
                     foreach (var file in Directory.GetFiles($"{Utils.SHARED_FOLDER}"))
                     {
@@ -52,91 +52,88 @@ namespace EncryptedFileSystem
 
                     break;
 
+                case "list-users":
+                    if (args.Length != 1)
+                        break;
+
+                    foreach (var file in AccountAccess.GetAccounts())
+                        System.Console.WriteLine(file.Key);
+
+                    break;
+
                 case "create":
                     args = command.Split('\"');
 
                     for (int i = 0; i < args.Length; i++)
                         args[i] = args[i].Trim();
 
-                    if (args.Length != 3)
-                        return false;
+                    if (args.Length == 3 && args[2] != "")
+                        CreateTextFile(args[2].Trim(), args[1].Trim());
 
-                    CreateTextFile(args[2].Trim(), args[1].Trim());
                     break;
 
                 case "open":
-                    if (args.Length != 2)
-                        return false;
+                    if (args.Length == 2 && args[1] != "")
+                        OpenFile(args[1]);
 
-                    OpenFile(args[1]);
                     break;
 
                 case "upload":
-                    if (args.Length != 2)
-                        return false;
+                    if (args.Length == 2 && args[1] != "")
+                        UploadFile(args[1]);
 
-                    UploadFile(args[1]);
                     break;
 
                 case "download":
-                    if (args.Length != 2)
-                        return false;
+                    if (args.Length == 2 && args[1] != "")
+                        DownloadFile(args[1]);
 
-                    DownloadFile(args[1]);
                     break;
 
                 case "edit":
-                    if (args.Length != 2)
-                        return false;
+                    if (args.Length == 2 && args[1] != "")
+                        EditTextFile(args[1]);
 
-                    EditTextFile(args[1]);
-                    break;
-
-                case "sign":
-                    if (args.Length != 2)
-                        return false;
-
-                    DigitalSignature.SignFile(args[1]);
-                    break;
-
-                case "verify":
-                    if (args.Length != 2)
-                        return false;
-
-                    System.Console.WriteLine("Verified: " + DigitalSignature.VerifySignature(args[1]));
                     break;
 
                 case "delete":
-                    if (args.Length != 2)
-                        return false;
+                    if (args.Length == 2 && args[1] != "")
+                        DeleteFile(args[1]);
 
-                    DeleteFile(args[1]);
                     break;
 
                 case "share":
-                    if (args.Length != 3)
-                        return false;
+                    if (args.Length == 3 && args[2] != "")
+                        ShareFile(args[1], args[2]);
 
-                    ShareFile(args[1], args[2]);
                     break;
 
                 case "receive":
-                    if (args.Length != 2)
-                        return false;
-
-                    DigitalEnvelope.ReceiveFile(args[1]);
+                    if (args.Length == 2 && args[1] != "")
+                        DigitalEnvelope.ReceiveFile(args[1]);
+                    
                     break;
 
                 case "logout":
-                    return true;
+                    if (args.Length == 1)
+                        return true;
+
+                    break;
+
+                case "clear":
+                    if (args.Length == 1)
+                        System.Console.Clear();
+                    
+                    return false;
 
                 case "exit":
-                    Environment.Exit(0);
+                    if (args.Length == 1)
+                        Environment.Exit(0);
+
                     break;
 
                 default:
-                    System.Console.WriteLine();
-                    return false;
+                    break;
             }
 
             System.Console.WriteLine();
@@ -162,8 +159,8 @@ namespace EncryptedFileSystem
                 System.Console.Write("Create file password: ");
                 var password = AccountAccess.ReadSecretPassword();
 
-                SymmetricCryptography.Encrypt(fileName, fileName, key: password, create: true);
                 DigitalSignature.SignFile(fileName);
+                SymmetricCryptography.Encrypt(fileName, fileName, key: password, create: true);
             }
         }
 
@@ -176,24 +173,24 @@ namespace EncryptedFileSystem
 
             else
             {
+                (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(fileName, key: key);
+                if (decFile.success == false)
+                    return;
+
                 if (shared)
                 {
-                    if (!DigitalSignature.VerifySharedSignature(fileName, user))
+                    if (!DigitalSignature.VerifySharedSignature(decFile.tmpFilename, Path.GetFileName(fileName), user))
                     {
                         System.Console.WriteLine("File integrity violated. Preventing file from opening.");
                         return;
                     }
                 }
 
-                else if (!DigitalSignature.VerifySignature(fileName))
+                else if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{Path.GetFileName(fileName)}.hash"))
                 {
                     System.Console.WriteLine("File integrity violated. Preventing file from opening.");
                     return;
                 }
-
-                (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(fileName, key: key);
-                if (decFile.success == false)
-                    return;
 
                 Process fileOpener = new Process();
                 fileOpener.StartInfo.FileName = program;
@@ -225,9 +222,9 @@ namespace EncryptedFileSystem
 
                 System.Console.Write("Create file password: ");
                 var password = AccountAccess.ReadSecretPassword();
-
-                SymmetricCryptography.Encrypt(fileName, Path.GetFileName(fileName), key: password, upload: true);
+                
                 DigitalSignature.SignFile(fileName);
+                SymmetricCryptography.Encrypt(fileName, Path.GetFileName(fileName), key: password, upload: true);
             }
         }
 
@@ -236,19 +233,19 @@ namespace EncryptedFileSystem
             targetFile = Path.GetFullPath(targetFile);
 
             if (!File.Exists(targetFile))
-                System.Console.WriteLine("File " + targetFile + " does not exist. Please specify another file.");
+                System.Console.WriteLine("File " + Path.GetFileName(targetFile) + " does not exist. Please specify another file.");
 
             else
             {
-                if (!DigitalSignature.VerifySignature(targetFile))
+                (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(targetFile);
+                if (decFile.success == false)
+                    return;
+
+                if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{targetFile}.hash"))
                 {
                     System.Console.WriteLine("File integrity violated. Preventing file from opening.");
                     return;
                 }
-
-                (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(targetFile);
-                if (decFile.success == false)
-                    return;
 
                 File.Copy(decFile.tmpFilename, $"{Utils.DESKTOP}\\{Path.GetFileName(targetFile)}");
             }
@@ -259,11 +256,11 @@ namespace EncryptedFileSystem
             fileName = Path.GetFullPath(fileName);
 
             if (!File.Exists(fileName))
-                System.Console.WriteLine("File " + fileName + " does not exist. Please specify another file.");
+                System.Console.WriteLine("File " + Path.GetFileName(fileName) + " does not exist. Please specify another file.");
 
             else if (".txt" != Path.GetExtension(fileName))
             {
-                System.Console.WriteLine("File " + fileName + " is not .txt file. Please specify another file.");
+                System.Console.WriteLine("File " + Path.GetFileName(fileName) + " is not .txt file. Please specify another file.");
                 return;
             }
 
@@ -276,7 +273,7 @@ namespace EncryptedFileSystem
             fileName = Path.GetFullPath(fileName);
 
             if (!File.Exists(fileName))
-                System.Console.WriteLine("File " + fileName + " does not exist. Please specify another file.");
+                System.Console.WriteLine("File " + Path.GetFileName(fileName) + " does not exist. Please specify another file.");
 
             else
             {
@@ -298,10 +295,17 @@ namespace EncryptedFileSystem
                 System.Console.WriteLine($"User {userName} does not exist. Please specify another user.");
                 return;
             }    
+
+            if (userName == FileSystem.currentUser.Username)
+            {
+                System.Console.WriteLine($"Why are you sharing your file with yourself? Please specify another user.");
+                return;
+            }
+
             fileName = Path.GetFullPath(fileName);
 
             if (!File.Exists(fileName))
-                System.Console.WriteLine("File \"" + fileName + "\" does not exist. Please specify another file.");
+                System.Console.WriteLine("File \"" + Path.GetFileName(fileName) + "\" does not exist. Please specify another file.");
 
             else
                 DigitalEnvelope.ShareFile(fileName, userName);
