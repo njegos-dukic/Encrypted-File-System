@@ -21,12 +21,22 @@ namespace EncryptedFileSystem
                     if (args.Length != 1)
                         return false;
 
-                    foreach (var file in Directory.GetFiles($"{Utils.ROOT_FOLDER}\\{Utils.USERNAME}"))
+                    foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
                     {
                         if(!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains("errors.txt"))
                             System.Console.WriteLine(Path.GetFileName(file));
                     }
 
+                    break;
+
+                case "cd":
+                    if (args.Length != 2)
+                        return false;
+
+                    if (!Directory.Exists(args[1]))
+                        Directory.CreateDirectory(args[1]);
+
+                    Directory.SetCurrentDirectory(args[1]);
                     break;
 
                 case "list-shared":
