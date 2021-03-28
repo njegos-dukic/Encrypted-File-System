@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
 namespace EncryptedFileSystem
 {
@@ -10,6 +8,7 @@ namespace EncryptedFileSystem
     {
         public static bool InterpretCommand(string command, User user)
         {
+            command = command.Trim();
             var args = command.Split(' ');
 
             for (int i = 0; i < args.Length; i++)
@@ -30,7 +29,7 @@ namespace EncryptedFileSystem
                     break;
 
                 case "cd":
-                    if (args.Length != 2 && args[1] != "")
+                    if (args.Length != 2)
                         break;
 
                     if (!Directory.Exists(args[1]))
@@ -73,43 +72,43 @@ namespace EncryptedFileSystem
                     break;
 
                 case "open":
-                    if (args.Length == 2 && args[1] != "")
+                    if (args.Length == 2)
                         OpenFile(args[1]);
 
                     break;
 
                 case "upload":
-                    if (args.Length == 2 && args[1] != "")
+                    if (args.Length == 2)
                         UploadFile(args[1]);
 
                     break;
 
                 case "download":
-                    if (args.Length == 2 && args[1] != "")
+                    if (args.Length == 2)
                         DownloadFile(args[1]);
 
                     break;
 
                 case "edit":
-                    if (args.Length == 2 && args[1] != "")
+                    if (args.Length == 2)
                         EditTextFile(args[1]);
 
                     break;
 
                 case "delete":
-                    if (args.Length == 2 && args[1] != "")
+                    if (args.Length == 2)
                         DeleteFile(args[1]);
 
                     break;
 
                 case "share":
-                    if (args.Length == 3 && args[2] != "")
+                    if (args.Length == 3)
                         ShareFile(args[1], args[2]);
 
                     break;
 
                 case "receive":
-                    if (args.Length == 2 && args[1] != "")
+                    if (args.Length == 2)
                         DigitalEnvelope.ReceiveFile(args[1]);
                     
                     break;

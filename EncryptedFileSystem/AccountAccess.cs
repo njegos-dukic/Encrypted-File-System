@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace EncryptedFileSystem
 {
@@ -29,6 +28,7 @@ namespace EncryptedFileSystem
         {
             string password = "";
             ConsoleKeyInfo info = Console.ReadKey(true);
+
             while (info.Key != ConsoleKey.Enter)
             {
                 if (info.Key != ConsoleKey.Backspace)
@@ -50,7 +50,13 @@ namespace EncryptedFileSystem
                 }
                 info = Console.ReadKey(true);
             }
-            Console.WriteLine();
+
+            if (password == "")
+                password = ReadSecretPassword();
+
+            else
+                System.Console.WriteLine();
+
             return password;
         }
 

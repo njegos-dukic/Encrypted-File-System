@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EncryptedFileSystem
+﻿namespace EncryptedFileSystem
 {
     class User
     {
@@ -17,7 +13,7 @@ namespace EncryptedFileSystem
         public User(string username, string passwordHash, string cypher, string hash)
         {
             this.Username = username;
-            this.PasswordHash = passwordHash; // Using for deleting files.
+            this.PasswordHash = passwordHash; // For deleting files.
 
             switch (cypher)
             {

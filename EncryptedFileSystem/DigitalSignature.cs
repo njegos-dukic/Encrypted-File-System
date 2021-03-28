@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace EncryptedFileSystem
 {
@@ -39,10 +36,6 @@ namespace EncryptedFileSystem
                 default:
                     return;
             }
-
-            // TODO: Kriptovati hash.
-            // SymmetricCryptography.SymmetricFileEncryption($"\"{file}.hash\"", $"\"{file}.hash\"", key: FileSystem.currentUser.PasswordHash);
-            // File.SetAttributes($"{file}.hash", FileAttributes.Hidden);
         }
 
         public static bool VerifySignature(string file, string hash)
