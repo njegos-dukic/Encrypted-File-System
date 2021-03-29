@@ -119,7 +119,7 @@ namespace EncryptedFileSystem
                     System.Console.WriteLine("   Please specify [1], [2] or [3].");
                 }
 
-                DigitalSignature.CreatePrivateKey(username);
+                PublicKeyCryptography.CreatePrivateKey(username);
                 DigitalCertificate.IssueCertificate(username);
                 writer.WriteLine(username + "," + DigitalSignature.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();

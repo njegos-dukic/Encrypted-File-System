@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EncryptedFileSystem
+﻿namespace EncryptedFileSystem
 {
     class FileSystem
     {

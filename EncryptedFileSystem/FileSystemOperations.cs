@@ -22,7 +22,7 @@ namespace EncryptedFileSystem
 
                     foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
                     {
-                        if(!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains("errors.txt"))
+                        if (!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains("errors.txt"))
                             System.Console.WriteLine(Path.GetFileName(file));
                     }
 
@@ -110,7 +110,7 @@ namespace EncryptedFileSystem
                 case "receive":
                     if (args.Length == 2)
                         DigitalEnvelope.ReceiveFile(args[1]);
-                    
+
                     break;
 
                 case "logout":
@@ -122,7 +122,7 @@ namespace EncryptedFileSystem
                 case "clear":
                     if (args.Length == 1)
                         System.Console.Clear();
-                    
+
                     return false;
 
                 case "exit":
@@ -158,8 +158,14 @@ namespace EncryptedFileSystem
                 System.Console.Write("Create file password: ");
                 var password = AccountAccess.ReadSecretPassword();
 
-                DigitalSignature.SignFile(fileName);
-                SymmetricCryptography.Encrypt(fileName, fileName, key: password, create: true);
+                DigitalSignature.SignFile(fileName, password);
+
+                string cyph = SymmetricCryptography.Encrypt(fileName, password);
+
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+
+                File.Copy(cyph, fileName);
             }
         }
 
@@ -172,20 +178,26 @@ namespace EncryptedFileSystem
 
             else
             {
+                if (key == "")
+                {
+                    System.Console.Write("Enter file password: ");
+                    key = AccountAccess.ReadSecretPassword();
+                }
+
                 (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(fileName, key: key);
                 if (decFile.success == false)
                     return;
 
                 if (shared)
                 {
-                    if (!DigitalSignature.VerifySharedSignature(decFile.tmpFilename, Path.GetFileName(fileName), user))
+                    if (!DigitalSignature.VerifySharedSignature(decFile.tmpFilename, $"{Path.GetFileName(fileName)}", user, key))
                     {
                         System.Console.WriteLine("File integrity violated. Preventing file from opening.");
                         return;
                     }
                 }
 
-                else if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{Path.GetFileName(fileName)}.hash"))
+                else if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{Path.GetFileName(fileName)}.hash", key))
                 {
                     System.Console.WriteLine("File integrity violated. Preventing file from opening.");
                     return;
@@ -221,9 +233,16 @@ namespace EncryptedFileSystem
 
                 System.Console.Write("Create file password: ");
                 var password = AccountAccess.ReadSecretPassword();
-                
-                DigitalSignature.SignFile(fileName);
-                SymmetricCryptography.Encrypt(fileName, Path.GetFileName(fileName), key: password, upload: true);
+
+                DigitalSignature.SignFile(fileName, password);
+
+
+                string cyph = SymmetricCryptography.Encrypt(fileName, password);
+
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+
+                File.Copy(cyph, fileName);
             }
         }
 
@@ -236,11 +255,14 @@ namespace EncryptedFileSystem
 
             else
             {
-                (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(targetFile);
+                System.Console.Write("Enter file password: ");
+                string key = AccountAccess.ReadSecretPassword();
+
+                (string tmpFilename, bool success) decFile = SymmetricCryptography.Decrypt(targetFile, key: key);
                 if (decFile.success == false)
                     return;
 
-                if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{targetFile}.hash"))
+                if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{targetFile}.hash", key))
                 {
                     System.Console.WriteLine("File integrity violated. Preventing file from opening.");
                     return;
@@ -278,10 +300,13 @@ namespace EncryptedFileSystem
             {
                 System.Console.Write("Please enter your password: ");
                 var password = AccountAccess.ReadSecretPassword();
-                
+
                 if (DigitalSignature.HashPassword(password) == FileSystem.currentUser.PasswordHash)
+                {
                     File.Delete(fileName);
-                
+                    File.Delete($"{fileName}.hash");
+                }
+
                 else
                     System.Console.WriteLine("Password is incorrect.");
             }
@@ -293,7 +318,7 @@ namespace EncryptedFileSystem
             {
                 System.Console.WriteLine($"User {userName} does not exist. Please specify another user.");
                 return;
-            }    
+            }
 
             if (userName == FileSystem.currentUser.Username)
             {

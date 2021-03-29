@@ -5,61 +5,45 @@ namespace EncryptedFileSystem
 {
     class SymmetricCryptography
     {
-        public static void Encrypt(string source, string destination, string key = "", bool create = false, bool upload = false, string message = "Create file password: ")
+        public static string Encrypt(string source, string key = "")
         {
             source = Path.GetFullPath(source);
-            destination = Path.GetFullPath(destination);
-
-            if (create)
-            {
-                var temp = Path.GetTempFileName() + Path.GetExtension(source);
-                File.Copy(source, temp);
-                File.Delete(source);
-                source = temp;
-            }
-
-            if (upload)
-            {
-                destination = Path.GetFileName(destination);
-                var temp = Path.GetTempFileName() + Path.GetExtension(source);
-                File.Copy(source, temp);
-                source = temp;
-            }
+            var outfile = Path.GetTempFileName() + Path.GetExtension(source);
 
             string password = key;
 
             if (key == "")
             {
-                System.Console.Write(message);
+                System.Console.Write("Create file password: ");
                 password = AccountAccess.ReadSecretPassword();
             }
 
             switch (FileSystem.currentUser.CypherType)
             {
                 case SymmetricCypher.DES3:
-                    Utils.ExecutePowerShellCommand($"openssl des3 -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{destination}\"");
+                    Utils.ExecutePowerShellCommand($"openssl des3 -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{outfile}\"");
                     break;
 
                 case SymmetricCypher.AES256:
-                    Utils.ExecutePowerShellCommand($"openssl aes-256-cbc -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{destination}\"");
+                    Utils.ExecutePowerShellCommand($"openssl aes-256-cbc -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{outfile}\"");
                     break;
 
                 case SymmetricCypher.RC4:
-                    Utils.ExecutePowerShellCommand($"openssl rc4 -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{destination}\"");
+                    Utils.ExecutePowerShellCommand($"openssl rc4 -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{outfile}\"");
                     break;
 
                 default:
-                    return;
+                    return null;
             }
 
-            return;
+            return outfile;
         }
 
         public static (string, bool) Decrypt(string inputFile, string key = "", string message = "Enter file password: ")
         {
             inputFile = Path.GetFullPath(inputFile);
             var outfile = Path.GetTempFileName() + Path.GetExtension(inputFile);
-            
+
             var password = key;
             if (key == "")
             {

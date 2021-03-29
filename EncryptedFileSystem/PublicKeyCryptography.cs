@@ -22,7 +22,7 @@ namespace EncryptedFileSystem
             Directory.SetCurrentDirectory($"{Utils.ROOT_FOLDER}\\{Utils.USERNAME}");
             Utils.ExecutePowerShellCommand($"openssl rsautl -encrypt -in \"{source}\" -out \"{destination}\" -inkey {Utils.PUBLIC_KEYS}\\{publicKeyOwner}.key -pubin", false);
         }
-        
+
         public static void GeneratePublicKeyFromCertificate(string user)
         {
             Directory.SetCurrentDirectory($"{Utils.CERTIFICATES}");
@@ -55,7 +55,11 @@ namespace EncryptedFileSystem
             Utils.ExecutePowerShellCommand($"openssl dsaparam -out \"{Utils.DSA_KEYS}\\{Utils.USERNAME}.key\" 4096");
             Utils.ExecutePowerShellCommand($"openssl gendsa -out \"{Utils.DSA_PRIVATE_KEYS}\\{Utils.USERNAME}.key\" \"{Utils.DSA_KEYS}\\{Utils.USERNAME}.key\"");
             Utils.ExecutePowerShellCommand($"openssl dsa -in \"{Utils.DSA_PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -pubout -out \"{Utils.DSA_PUBLIC_KEYS}\\{Utils.USERNAME}.key\"");
+        }
 
+        public static void CreatePrivateKey(string username)
+        {
+            Utils.ExecutePowerShellCommand($"openssl genrsa -out {Utils.PRIVATE_KEYS}\\{username}.key 4096");
         }
     }
 }

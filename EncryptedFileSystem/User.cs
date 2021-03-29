@@ -51,7 +51,7 @@
                     return;
             }
         }
-    
+
         public void SetCypherAndHash(string cypher, string hash)
         {
             switch (cypher.Trim())
