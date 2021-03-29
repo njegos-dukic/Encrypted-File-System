@@ -31,7 +31,7 @@ namespace EncryptedFileSystem
 
             File.WriteAllText($"{Path.GetFileName(filename)}.envelope", $"{Utils.USERNAME}\n{password}\n{FileSystem.currentUser.CypherType}\n{FileSystem.currentUser.HashType}");
             PublicKeyCryptography.Encrypt($"{Path.GetFileName(filename)}.envelope", $"{Utils.SHARED_FOLDER}\\{Path.GetFileName(filename)}.envelope", user);
-            File.Delete($"{filename}.envelope");
+            File.Delete($"{Utils.CERTIFICATES}\\{Path.GetFileName(filename)}.envelope");
         }
 
         public static void ReceiveFile(string filename)
