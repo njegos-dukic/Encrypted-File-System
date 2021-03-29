@@ -4,8 +4,6 @@
     {
         public string Username { get; private set; }
 
-        public string PasswordHash { get; private set; }
-
         public SymmetricCypher CypherType { get; set; }
 
         public HashFunction HashType { get; set; }
@@ -13,7 +11,6 @@
         public User(string username, string passwordHash, string cypher, string hash)
         {
             this.Username = username;
-            this.PasswordHash = passwordHash; // For deleting files.
 
             switch (cypher)
             {
