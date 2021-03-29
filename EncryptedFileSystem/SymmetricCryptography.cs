@@ -21,15 +21,15 @@ namespace EncryptedFileSystem
             switch (FileSystem.currentUser.CypherType)
             {
                 case SymmetricCypher.DES3:
-                    Utils.ExecutePowerShellCommand($"openssl des3 -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{outfile}\"");
+                    Utils.ExecutePowerShellCommand($"openssl des3 -e -pbkdf2 -iter 100000 -k {password} -base64 -in \"{source}\" -out \"{outfile}\"");
                     break;
 
                 case SymmetricCypher.AES256:
-                    Utils.ExecutePowerShellCommand($"openssl aes-256-cbc -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{outfile}\"");
+                    Utils.ExecutePowerShellCommand($"openssl aes-256-cbc -e -pbkdf2 -iter 100000 -k {password} -base64 -in \"{source}\" -out \"{outfile}\"");
                     break;
 
                 case SymmetricCypher.RC4:
-                    Utils.ExecutePowerShellCommand($"openssl rc4 -e -pbkdf2 -iter 100000 -k {password} -in \"{source}\" -out \"{outfile}\"");
+                    Utils.ExecutePowerShellCommand($"openssl rc4 -e -pbkdf2 -iter 100000 -k {password} -base64 -in \"{source}\" -out \"{outfile}\"");
                     break;
 
                 default:
@@ -56,15 +56,15 @@ namespace EncryptedFileSystem
             switch (FileSystem.currentUser.CypherType)
             {
                 case SymmetricCypher.DES3:
-                    Utils.ExecutePowerShellCommand($"openssl des3 -d -pbkdf2 -iter 100000 -k {password} -in \"{inputFile}\" -out \"{outfile}\"");
+                    Utils.ExecutePowerShellCommand($"openssl des3 -d -pbkdf2 -iter 100000 -k {password} -base64 -in \"{inputFile}\" -out \"{outfile}\"");
                     break;
 
                 case SymmetricCypher.AES256:
-                    Utils.ExecutePowerShellCommand($"openssl aes-256-cbc -d -pbkdf2 -iter 100000 -k {password} -in \"{inputFile}\" -out \"{outfile}\"");
+                    Utils.ExecutePowerShellCommand($"openssl aes-256-cbc -d -pbkdf2 -iter 100000 -k {password} -base64 -in \"{inputFile}\" -out \"{outfile}\"");
                     break;
 
                 case SymmetricCypher.RC4:
-                    Utils.ExecutePowerShellCommand($"openssl rc4 -d -pbkdf2 -iter 100000 -k {password} -in \"{inputFile}\" -out \"{outfile}\"");
+                    Utils.ExecutePowerShellCommand($"openssl rc4 -d -pbkdf2 -iter 100000 -k {password} -base64 -in \"{inputFile}\" -out \"{outfile}\"");
                     break;
 
                 default:
