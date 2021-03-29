@@ -4,14 +4,6 @@ namespace EncryptedFileSystem
 {
     class DigitalSignature
     {
-        // TODO: Save salt securely.
-        private static string salt = "WjmAoo120Gb92ba7";
-
-        public static string HashPassword(string password)
-        {
-            return Utils.ExecutePowerShellCommand($"openssl passwd -6 -salt {salt} {password}");
-        }
-
         public static void SignFile(string file, string password)
         {
             file = Path.GetFileName(file);

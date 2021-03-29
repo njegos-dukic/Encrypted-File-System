@@ -301,7 +301,7 @@ namespace EncryptedFileSystem
                 System.Console.Write("Please enter your password: ");
                 var password = AccountAccess.ReadSecretPassword();
 
-                if (DigitalSignature.HashPassword(password) == FileSystem.currentUser.PasswordHash)
+                if (AccountAccess.VerifyPassword(Utils.USERNAME, password))
                 {
                     File.Delete(fileName);
                     File.Delete($"{fileName}.hash");

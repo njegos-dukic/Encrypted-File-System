@@ -121,7 +121,7 @@ namespace EncryptedFileSystem
 
                 PublicKeyCryptography.CreatePrivateKey(username);
                 DigitalCertificate.IssueCertificate(username);
-                writer.WriteLine(username + "," + DigitalSignature.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
+                writer.WriteLine(username + "," + AccountAccess.HashPassword(password) + "," + cypherInput.Trim() + "," + dgstInput.Trim(), true);
                 writer.Close();
 
                 System.Console.Write($"- Successful registration ");
@@ -150,7 +150,7 @@ namespace EncryptedFileSystem
             if (!accounts.ContainsKey(username))
                 System.Console.WriteLine("\n- Account does not exist.\n");
 
-            else if (userInfo.pass == DigitalSignature.HashPassword(password))
+            else if (AccountAccess.VerifyPassword(username, password))
             {
                 if (!DigitalCertificate.VerifyCertificate(username))
                 {
@@ -171,6 +171,27 @@ namespace EncryptedFileSystem
                 System.Console.WriteLine("\n- Invalid password.\n");
 
             return null;
+        }
+
+        public static string HashPassword(string password, string salt = "")
+        {
+            if (salt == "")
+                salt = Utils.GenerateRandomPassword();
+
+            return Utils.ExecutePowerShellCommand($"openssl passwd -6 -salt {salt} {password}").Trim();
+        }
+
+        public static bool VerifyPassword(string username, string password)
+        {
+            var accounts = GetAccounts();
+            (string password, string cypher, string hash) info;
+            accounts.TryGetValue(username, out info);
+            var hashParts = info.password.Split('$');
+
+            if (HashPassword(password, hashParts[2]) == info.password)
+                return true;
+
+            return false;
         }
     }
 }
