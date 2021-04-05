@@ -17,8 +17,8 @@ namespace EncryptedFileSystem
                     Utils.ExecutePowerShellCommand($"openssl dgst -sign \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha256 -out \"{file}.hash\" \"{file}\"");
                     break;
 
-                case HashFunction.MD5:
-                    Utils.ExecutePowerShellCommand($"openssl dgst -sign \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -md5 -out \"{file}.hash\" \"{file}\"");
+                case HashFunction.SHA224:
+                    Utils.ExecutePowerShellCommand($"openssl dgst -sign \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha224 -out \"{file}.hash\" \"{file}\"");
                     break;
 
                 case HashFunction.SHA1:
@@ -53,8 +53,8 @@ namespace EncryptedFileSystem
                 case HashFunction.SHA256:
                     return Utils.ExecutePowerShellCommand($"openssl dgst -prverify \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha256 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
 
-                case HashFunction.MD5:
-                    return Utils.ExecutePowerShellCommand($"openssl dgst -prverify \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -md5 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
+                case HashFunction.SHA224:
+                    return Utils.ExecutePowerShellCommand($"openssl dgst -prverify \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha224 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
 
                 case HashFunction.SHA1:
                     return Utils.ExecutePowerShellCommand($"openssl dgst -prverify \"{Utils.PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha1 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
@@ -77,8 +77,8 @@ namespace EncryptedFileSystem
                     Utils.ExecutePowerShellCommand($"openssl dgst -sign \"{Utils.DSA_PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha256 -out \"{Utils.SHARED_FOLDER}\\{name}.hash\" \"{file}\"");
                     break;
 
-                case HashFunction.MD5:
-                    Utils.ExecutePowerShellCommand($"openssl dgst -sign \"{Utils.DSA_PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -md5 -out \"{Utils.SHARED_FOLDER}\\{name}.hash\" \"{file}\"");
+                case HashFunction.SHA224:
+                    Utils.ExecutePowerShellCommand($"openssl dgst -sign \"{Utils.DSA_PRIVATE_KEYS}\\{Utils.USERNAME}.key\" -sha224 -out \"{Utils.SHARED_FOLDER}\\{name}.hash\" \"{file}\"");
                     break;
 
                 case HashFunction.SHA1:
@@ -118,8 +118,8 @@ namespace EncryptedFileSystem
                 case HashFunction.SHA256:
                     return Utils.ExecutePowerShellCommand($"openssl dgst -verify \"{Utils.DSA_PUBLIC_KEYS}\\{user}.key\" -sha256 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
 
-                case HashFunction.MD5:
-                    return Utils.ExecutePowerShellCommand($"openssl dgst -verify \"{Utils.DSA_PUBLIC_KEYS}\\{user}.key\" -md5 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
+                case HashFunction.SHA224:
+                    return Utils.ExecutePowerShellCommand($"openssl dgst -verify \"{Utils.DSA_PUBLIC_KEYS}\\{user}.key\" -sha224 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
 
                 case HashFunction.SHA1:
                     return Utils.ExecutePowerShellCommand($"openssl dgst -verify \"{Utils.DSA_PUBLIC_KEYS}\\{user}.key\" -sha1 -signature \"{tmpFilename}\" \"{file}\"").Contains("OK");
@@ -133,7 +133,7 @@ namespace EncryptedFileSystem
     enum HashFunction
     {
         SHA256,
-        MD5,
+        SHA224,
         SHA1
     }
 }

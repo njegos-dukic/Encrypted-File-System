@@ -21,10 +21,8 @@ namespace EncryptedFileSystem
                         break;
 
                     foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
-                    {
                         if (!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains("errors.txt"))
                             System.Console.WriteLine(Path.GetFileName(file));
-                    }
 
                     break;
 
@@ -197,10 +195,13 @@ namespace EncryptedFileSystem
                     }
                 }
 
-                else if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{Path.GetFileName(fileName)}.hash", key))
+                else if (!shared)
                 {
-                    System.Console.WriteLine("File integrity violated. Preventing file from opening.");
-                    return;
+                    if (!DigitalSignature.VerifySignature(decFile.tmpFilename, $"{Path.GetFileName(fileName)}.hash", key))
+                    {
+                        System.Console.WriteLine("File integrity violated. Preventing file from opening.");
+                        return;
+                    }
                 }
 
                 Process fileOpener = new Process();

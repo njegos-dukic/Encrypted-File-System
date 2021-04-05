@@ -37,7 +37,7 @@
                     break;
 
                 case "2":
-                    HashType = HashFunction.MD5;
+                    HashType = HashFunction.SHA224;
                     break;
 
                 case "3":
@@ -75,8 +75,8 @@
                     HashType = HashFunction.SHA256;
                     break;
 
-                case "MD5":
-                    HashType = HashFunction.MD5;
+                case "SHA224":
+                    HashType = HashFunction.SHA224;
                     break;
 
                 case "SHA1":

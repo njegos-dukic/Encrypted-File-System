@@ -109,7 +109,7 @@ namespace EncryptedFileSystem
                     Console.ForegroundColor = ConsoleColor.White;
                     System.Console.WriteLine("   -----------");
                     System.Console.WriteLine("   [1] SHA256");
-                    System.Console.WriteLine("   [2] MD5");
+                    System.Console.WriteLine("   [2] SHA224");
                     System.Console.WriteLine("   [3] SHA1");
                     System.Console.Write("   Please select: ");
                     dgstInput = System.Console.ReadLine();

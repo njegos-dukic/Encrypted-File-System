@@ -56,7 +56,7 @@ namespace EncryptedFileSystem
 
             string currentCypher = FileSystem.currentUser.CypherType.ToString();
             string currentDgst = FileSystem.currentUser.HashType.ToString();
-
+             
             string user = info[0];
             string password = info[1];
             string cyph = info[2];

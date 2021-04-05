@@ -36,7 +36,15 @@ namespace EncryptedFileSystem
                 Directory.CreateDirectory("certificates");
 
             if (!File.Exists("certificates\\openssl.cnf"))
+            {
+                if (!File.Exists($"{DESKTOP}\\openssl.cnf"))
+                {
+                    System.Console.WriteLine("Please place \"OpenSSL.cnf\" file on desktop.");
+                    Environment.Exit(1);
+                }    
+
                 File.Copy($"{DESKTOP}\\openssl.cnf", "certificates\\openssl.cnf");
+            }
 
             if (!Directory.Exists("certificates\\certs"))
                 Directory.CreateDirectory("certificates\\certs");
