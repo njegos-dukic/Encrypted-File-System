@@ -24,6 +24,9 @@ namespace EncryptedFileSystem
                         if (!Path.GetFileName(file).Contains(".hash") && !Path.GetFileName(file).Contains("errors.txt"))
                             System.Console.WriteLine(Path.GetFileName(file));
 
+                    foreach (var directory in Directory.GetDirectories(Directory.GetCurrentDirectory()))
+                        System.Console.WriteLine("Directory: " + Path.GetFileName(directory));
+
                     break;
 
                 case "cd":
