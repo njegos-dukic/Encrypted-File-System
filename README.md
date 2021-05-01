@@ -1,4 +1,4 @@
-**ENCRYPTED FILE SYSTEM**
+# **ENCRYPTED FILE SYSTEM**
 
 - When an operating system is running on a system without file encryption, access to files normally goes through OS-controlled user authentication and access control lists. However, if an attacker gains physical access to the computer, this barrier can be easily circumvented. One way, for example, would be to remove the disk and put it in another computer with an OS installed that can read the filesystem; another, would be to simply reboot the computer from a boot CD containing an OS that is suitable for accessing the local filesystem.
 
